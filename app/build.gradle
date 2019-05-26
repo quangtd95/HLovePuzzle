@@ -1,0 +1,77 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'kotlin-kapt'
+
+android {
+
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "com.quangtd.hlovepuzzle"
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
+
+    dataBinding {
+        enabled = true
+    }
+}
+
+dependencies {
+    def versions = [:]
+    versions.lifecycle = "2.0.0"
+    versions.room = "2.1.0-beta01"
+    versions.glide = "4.8.0"
+    ext.versions = versions
+
+    //kotlin - core
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.core:core-ktx:1.0.2'
+    //fire base
+    implementation 'com.google.firebase:firebase-database:17.0.0'
+    implementation 'com.google.firebase:firebase-storage:17.0.0'
+    implementation 'com.google.firebase:firebase-auth:17.0.0'
+    //unit test
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    //live data
+    implementation "androidx.lifecycle:lifecycle-runtime:$versions.lifecycle"
+    annotationProcessor "androidx.lifecycle:lifecycle-compiler:$versions.lifecycle"
+    implementation "androidx.lifecycle:lifecycle-extensions:$versions.lifecycle"
+    //room
+    implementation "androidx.room:room-runtime:$versions.room"
+    annotationProcessor "androidx.room:room-compiler:$versions.room"
+    //constraint layout
+    implementation "androidx.constraintlayout:constraintlayout:2.0.0-beta1"
+    // circleImageView
+    api 'de.hdodenhof:circleimageview:3.0.0'
+    api 'com.androidadvance:topsnackbar:1.1.1'
+    //dynamic dimens
+    implementation 'com.intuit.sdp:sdp-android:1.0.4'
+    //gson
+    implementation 'com.google.code.gson:gson:2.8.5'
+    //glide
+    implementation "com.github.bumptech.glide:glide:$versions.glide"
+
+    kapt "com.android.databinding:compiler:3.1.4"
+
+}
