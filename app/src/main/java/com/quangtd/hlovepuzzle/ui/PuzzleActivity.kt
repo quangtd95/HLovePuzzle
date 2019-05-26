@@ -1,6 +1,8 @@
 package com.quangtd.hlovepuzzle.ui
 
+import android.content.Intent
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.text.Html
@@ -66,5 +68,8 @@ class PuzzleActivity : BaseActivity() {
             }
             mBinding.tvContent.movementMethod = ScrollingMovementMethod()
         })
+        mBinding.tvContent.setOnClickListener {
+            startActivity(Intent(Intent.ACTION_VIEW).setData(Uri.parse(mContent.link)))
+        }
     }
 }

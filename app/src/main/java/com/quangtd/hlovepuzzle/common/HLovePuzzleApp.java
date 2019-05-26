@@ -17,7 +17,6 @@
 package com.quangtd.hlovepuzzle.common;
 
 import android.app.Application;
-import com.quangtd.hlovepuzzle.db.AppDatabase;
 import com.quangtd.hlovepuzzle.db.DataRepository;
 
 /**
@@ -34,12 +33,12 @@ public class HLovePuzzleApp extends Application {
         mAppExecutors = new AppExecutors();
         getRepository();
     }
-
-    public AppDatabase getDatabase() {
-        return AppDatabase.getInstance(this, mAppExecutors);
-    }
+//
+//    public AppDatabase getDatabase() {
+//        return AppDatabase.getInstance(this, mAppExecutors);
+//    }
 
     public DataRepository getRepository() {
-        return DataRepository.getInstance(getDatabase());
+        return DataRepository.getInstance();
     }
 }
