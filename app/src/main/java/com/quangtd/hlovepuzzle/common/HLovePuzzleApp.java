@@ -17,6 +17,8 @@
 package com.quangtd.hlovepuzzle.common;
 
 import android.app.Application;
+import com.bumptech.glide.request.target.ViewTarget;
+import com.quangtd.hlovepuzzle.R;
 import com.quangtd.hlovepuzzle.db.DataRepository;
 
 /**
@@ -32,6 +34,7 @@ public class HLovePuzzleApp extends Application {
 
         mAppExecutors = new AppExecutors();
         getRepository();
+        ViewTarget.setTagId(R.id.glide_tag);
     }
 //
 //    public AppDatabase getDatabase() {

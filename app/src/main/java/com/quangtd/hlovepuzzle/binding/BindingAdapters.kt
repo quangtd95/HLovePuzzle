@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package com.quangtd.hlovepuzzle.util
+package com.quangtd.hlovepuzzle.binding
 
 import android.graphics.drawable.Drawable
-import android.util.Log
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
@@ -31,8 +30,7 @@ import com.bumptech.glide.request.RequestListener
 object BindingAdapters {
     @JvmStatic
     @BindingAdapter(value = ["imageUrl", "imageRequestListener"], requireAll = false)
-    fun bindImage(imageView: ImageView, url: String?, imageRequestListener: RequestListener<Drawable>) {
-        Log.e("TAGG", "url"+url)
+    fun bindImage(imageView: ImageView, url: String?, imageRequestListener: RequestListener<Drawable?>?) {
         Glide.with(imageView.context).load(url).listener(imageRequestListener).into(imageView)
     }
 }
