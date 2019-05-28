@@ -36,10 +36,7 @@ public class HLovePuzzleApp extends Application {
         getRepository();
         ViewTarget.setTagId(R.id.glide_tag);
     }
-//
-//    public AppDatabase getDatabase() {
-//        return AppDatabase.getInstance(this, mAppExecutors);
-//    }
+
 
     public DataRepository getRepository() {
         return DataRepository.getInstance();
