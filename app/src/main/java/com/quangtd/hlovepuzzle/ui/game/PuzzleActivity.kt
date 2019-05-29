@@ -1,27 +1,33 @@
 package com.quangtd.hlovepuzzle.ui.game
 
-import android.graphics.Color.*
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.text.Html
 import android.text.method.ScrollingMovementMethod
 import android.view.DragEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
+import android.widget.RelativeLayout
 import androidx.cardview.widget.CardView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.quangtd.hlovepuzzle.R
 import com.quangtd.hlovepuzzle.binding.BindingAdapters
 import com.quangtd.hlovepuzzle.databinding.ActivityPuzzleBinding
 import com.quangtd.hlovepuzzle.db.entity.ContentEntity
 import com.quangtd.hlovepuzzle.model.DragData
-import com.quangtd.hlovepuzzle.model.PuzzlePiece
 import com.quangtd.hlovepuzzle.ui.BaseActivity
+import com.quangtd.hlovepuzzle.util.PieceGenerator
 import com.quangtd.hlovepuzzle.viewmodel.PuzzleViewModel
-import kotlinx.android.synthetic.main.item_puzzle.view.*
 
 class PuzzleActivity : BaseActivity(), View.OnDragListener {
 
@@ -50,15 +56,36 @@ class PuzzleActivity : BaseActivity(), View.OnDragListener {
                 )
             }
             mBinding.tvContent.movementMethod = ScrollingMovementMethod()
+            val adapter = PuzzlePieceAdapter()
+            mBinding.imageRequestListener = object : RequestListener<Drawable> {
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    return true
+                }
+
+                override fun onResourceReady(
+                    resource: Drawable?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    dataSource: DataSource?,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    Handler().postDelayed({
+                        val list = PieceGenerator.splitImage(mBinding.imvGame, (resource as BitmapDrawable).bitmap)
+                        adapter.setList(list)
+                        mBinding.rvPieceList.adapter = adapter
+                    }, 0)
+                    return false
+                }
+
+            }
         })
 
-        val adapter = PuzzlePieceAdapter()
-        var list = ArrayList<PuzzlePiece>()
-        for (i in 1..5) {
-            list.add(PuzzlePiece("https://static.thenounproject.com/png/1134418-200.png"))
-        }
-        adapter.setList(list)
-        mBinding.rvPieceList.adapter = adapter
+
         mBinding.tvContent.setOnClickListener {
             //            startActivity(Intent(Intent.ACTION_VIEW).setData(Uri.parse(mContent.link)))
         }
@@ -68,13 +95,13 @@ class PuzzleActivity : BaseActivity(), View.OnDragListener {
     override fun onDrag(v: View?, event: DragEvent?): Boolean {
         when (event!!.action) {
             DragEvent.ACTION_DRAG_ENTERED -> {
-                mBinding.frGame.setBackgroundColor(GREEN)
+//                mBinding.frGame.setBackgroundColor(GREEN)
             }
             DragEvent.ACTION_DRAG_EXITED -> {
-                mBinding.frGame.setBackgroundColor(RED)
+//                mBinding.frGame.setBackgroundColor(RED)
             }
             DragEvent.ACTION_DRAG_ENDED -> {
-                mBinding.frGame.setBackgroundColor(WHITE)
+//                mBinding.frGame.setBackgroundColor(WHITE)
             }
             DragEvent.ACTION_DROP -> {
                 var dropX = event.x
@@ -85,13 +112,14 @@ class PuzzleActivity : BaseActivity(), View.OnDragListener {
                 var shape = LayoutInflater.from(this).inflate(
                     R.layout.item_puzzle, mBinding.frGame, false
                 ) as CardView
-                var imageView = shape.imvPiece as ImageView
-                BindingAdapters.bindImage(imageView, state.item.img, null)
-                shape.x = dropX - state.width / 2
-                shape.y = dropY - state.height / 2
-                shape.layoutParams.width = state.width
-                shape.layoutParams.height = state.height
-                mBinding.frGame.addView(shape)
+                var imageView = ImageView(this, null)//shape.imvPiece as ImageView
+                BindingAdapters.bindImage(imageView, state.item.imageBitmap, null)
+                imageView.x = dropX - state.width / 2
+                imageView.y = dropY - state.height / 2
+                imageView.layoutParams = RelativeLayout.LayoutParams(state.item.pieceWidth, state.item.pieceHeight)
+//                imageView.layoutParams.width = state.item.pieceWidth
+//                imageView.layoutParams.height = state.item.pieceHeight
+                mBinding.frGame.addView(imageView)
             }
         }
         return true

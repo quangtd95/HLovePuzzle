@@ -16,6 +16,7 @@
 
 package com.quangtd.hlovepuzzle.binding
 
+import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
@@ -32,6 +33,12 @@ object BindingAdapters {
     @BindingAdapter(value = ["imageUrl", "imageRequestListener"], requireAll = false)
     fun bindImage(imageView: ImageView, url: String?, imageRequestListener: RequestListener<Drawable?>?) {
         Glide.with(imageView.context).load(url).listener(imageRequestListener).into(imageView)
+    }
+
+    @JvmStatic
+    @BindingAdapter(value = ["imageBitmap", "imageRequestListener"], requireAll = false)
+    fun bindImage(imageView: ImageView, imageBitmap: Bitmap?, imageRequestListener: RequestListener<Drawable?>?) {
+        Glide.with(imageView.context).load(imageBitmap).listener(imageRequestListener).into(imageView)
     }
 }
 
